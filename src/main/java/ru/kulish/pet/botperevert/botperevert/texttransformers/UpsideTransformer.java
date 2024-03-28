@@ -1,9 +1,6 @@
 package ru.kulish.pet.botperevert.botperevert.texttransformers;
 
-import java.util.Arrays;
-import java.util.function.IntUnaryOperator;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class UpsideTransformer implements Transformer {
     private String normal;
@@ -20,32 +17,24 @@ public class UpsideTransformer implements Transformer {
         upside += "0ƖᄅƐㄣϛ9ㄥ86";
         //rus
         normal += "абвгдеёжзийклмнопрстуфхцчшщъыьэюя";
-        upside += "ɐgʚL6ǝǝжєииʞvwноudɔ⊥ʎфхцҺmmqqıqєюʁ";
+        upside += "ɐgʚL6ǝǝжєииʞvwноudɔ⊥ʎфхцҺmmqıqєюʁ";
         normal += "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
-        upside += "ɐgʚL6ǝǝжєииʞvwноudɔ⊥ʎфхцҺmmqqıqєюʁ";
+        upside += "ɐgʚL6ǝǝжєииʞvwноudɔ⊥ʎфхцҺmmqıqєюʁ";
     }
 
     @Override
     public String transform(String text) {
         return text.chars()
-                .mapToObj(e-> {
-                    int charIndex = normal.indexOf(e);
-                    char i = charIndex == -1 ? (char) e : upside.charAt(charIndex);
-                    return String.valueOf(i);
-                })
-//                .map(e-> (char) e)
-                .peek(e-> {
-                    System.out.println(e);
-                })
-//                .mapToObj(String::valueOf)
-//                .peek(e-> System.out.println(e))
+                .mapToObj(this::getUpsideChar)
                 .collect(Collectors.joining());
     }
 
-    public static void main(String[] args) {
-        String transform = new UpsideTransformer().transform("Привет из Австралии, как дела?  Hello Boi???");
-        System.out.println("\n\n\n");
-        System.out.println(transform);
-        System.out.println("\n\n\n");
+    private String getUpsideChar(int charInInt) {
+        int charIndex = normal.indexOf(charInInt);
+        //upside char ы contains two chars
+        if(charInInt == 'ы' || charInInt == 'Ы') return "qı";
+        char i = charIndex == -1 ? (char) charInInt : upside.charAt(charIndex);
+        return String.valueOf(i);
     }
+
 }
